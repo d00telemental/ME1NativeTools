@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FunctionDumper", "FunctionD
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoggerProcessInternal", "LoggerProcessInternal\LoggerProcessInternal.vcxproj", "{F00C66F1-95DF-4BDC-B536-C168078929DC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleConsoleCommands", "ExampleConsoleCommands\ExampleConsoleCommands.vcxproj", "{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -46,6 +48,14 @@ Global
 		{F00C66F1-95DF-4BDC-B536-C168078929DC}.Release|x64.Build.0 = Release|x64
 		{F00C66F1-95DF-4BDC-B536-C168078929DC}.Release|x86.ActiveCfg = Release|Win32
 		{F00C66F1-95DF-4BDC-B536-C168078929DC}.Release|x86.Build.0 = Release|Win32
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Debug|x64.ActiveCfg = Debug|x64
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Debug|x64.Build.0 = Debug|x64
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Debug|x86.ActiveCfg = Debug|Win32
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Debug|x86.Build.0 = Debug|Win32
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Release|x64.ActiveCfg = Release|x64
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Release|x64.Build.0 = Release|x64
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Release|x86.ActiveCfg = Release|Win32
+		{FBAC8665-7AC8-4CE7-BF28-3A6009F3B586}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

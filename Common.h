@@ -103,6 +103,11 @@ namespace me1asi {
 				}
 			}
 
+			void initialize()
+			{
+				_initialized = true;
+			}
+
 			void initialize(const char* fname)
 			{
 				file = fopen(fname, "w");
