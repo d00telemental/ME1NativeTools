@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8DC2E0
 		Common.h = Common.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FunctionDumper", "FunctionDumper\FunctionDumper.vcxproj", "{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -26,6 +28,14 @@ Global
 		{2B19F816-5492-43DC-BACD-D7B5A8A708DB}.Release|x64.Build.0 = Release|x64
 		{2B19F816-5492-43DC-BACD-D7B5A8A708DB}.Release|x86.ActiveCfg = Release|Win32
 		{2B19F816-5492-43DC-BACD-D7B5A8A708DB}.Release|x86.Build.0 = Release|Win32
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Debug|x64.ActiveCfg = Debug|x64
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Debug|x64.Build.0 = Debug|x64
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Debug|x86.ActiveCfg = Debug|Win32
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Debug|x86.Build.0 = Debug|Win32
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Release|x64.ActiveCfg = Release|x64
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Release|x64.Build.0 = Release|x64
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Release|x86.ActiveCfg = Release|Win32
+		{9B67C3A8-98F8-4182-BD7E-FABB5BD9005D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

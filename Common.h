@@ -278,7 +278,7 @@ namespace me1asi {
 			for (auto i = 0; i < objects->Count; i++)
 			{
 				auto object = objects->Data[i];
-				if (object && object->IsA(T::StaticClass()) && !string::starts_with(object->Name.GetName(), "Default_"))
+				if (object && object->IsA(T::StaticClass()) && !string::starts_with(object->Name.GetName(), L"Default_"))
 				{
 					found.push_back(reinterpret_cast<T*>(object));
 				}
@@ -298,7 +298,7 @@ namespace me1asi {
 			for (auto i = 0; i < objects->Count; i++)
 			{
 				auto object = objects->Data[i];
-				if (object && object->IsA(T::StaticClass()) && !string::starts_with(object->Name.GetName(), "Default_"))
+				if (object && object->IsA(T::StaticClass()) && !string::starts_with(object->Name.GetName(), L"Default_"))
 				{
 					return reinterpret_cast<T*>(object);
 				}
