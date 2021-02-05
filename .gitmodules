@@ -1,0 +1,3 @@
+[submodule "third_party/ME1-SDK"]
+	path = third_party/ME1-SDK
+	url = https://gitlab.com/4rterius/me1-sdk
