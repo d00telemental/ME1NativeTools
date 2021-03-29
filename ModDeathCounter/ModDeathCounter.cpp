@@ -8,8 +8,10 @@ using namespace me1asi;
 
 
 // ================================================================================
-// Utility macros.
+// Utility macros and definitions.
 // ================================================================================
+
+//#define ASI_OPEN_CONSOLE
 
 #define FIND_FUNCTION(field, name, impl)  do {                  \
 		    this->field = sdk::find_function("Function " name); \
@@ -196,7 +198,10 @@ void __fastcall HookedCallFunction(UObject* Context, void* edx, FFrame& Stack, v
 
 void OnAttach()
 {
+#ifdef ASI_OPEN_CONSOLE
 	io::setup_console();
+#endif
+
 	io::logger.initialize("mod_death_counter.log");
 
 	DetourTransactionBegin();
@@ -214,7 +219,9 @@ void OnDetach()
 	DetourDetach(&(PVOID&)ActorConsoleCommand, HookedActorConsoleCommand);
 	DetourTransactionCommit();
 
+#ifdef ASI_OPEN_CONSOLE
 	io::teardown_console();
+#endif
 }
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
