@@ -35,6 +35,12 @@ using namespace me1asi;
 void __fastcall MyPostRender(ABioHUD* Context, void* edx, FFrame& Stack, void* Result);
 void __fastcall MySpawnGameOverGUI(ABioSPGame* Context, void* edx, FFrame& Stack, void* Result);
 
+typedef void(__thiscall* tActorConsoleCommand)(UObject*, FFrame&, void* const);
+tActorConsoleCommand ActorConsoleCommand = (tActorConsoleCommand)0x10AAB1A0;
+void __fastcall HookedActorConsoleCommand(UObject* Context, void* edx, FFrame& Stack, void* const Result);
+
+void __fastcall HookedCallFunction(UObject* Context, void* edx, FFrame& Stack, void* Result, UFunction* Function);
+
 
 // ================================================================================
 // Central mod structures.
@@ -45,7 +51,7 @@ struct DeathCounterMod
 public:
 	int DeathCount = 0;
 	std::vector<std::string> Errors;
-	bool ShowInGUI = true;
+	bool ShowInGUI = false;
 
 private:
 	bool Initialized = false;
@@ -117,6 +123,19 @@ public:
 		io::logger.write_format_line(io::LM_File | io::LM_Console, "MySpawnGameOverGUI: death registered.");
 	}
 
+	void ProcessCommand(wchar_t* cmd)
+	{
+		if (string::equals(cmd, L"dc.togglehud"))
+		{
+			Mod.ShowInGUI = !Mod.ShowInGUI;
+		}
+		else if (string::equals(cmd, L"dc.resetcount"))
+		{
+			Mod.DeathCount = 0;
+			WriteToFile();
+		}
+	}
+
 } Mod;
 
 
@@ -142,10 +161,10 @@ void __fastcall MyPostRender(ABioHUD* Context, void* edx, FFrame& Stack, void* R
 	if (Mod.ShowInGUI)
 	{
 		canvas->SetDrawColor(250, 25, 25, 255);
-		canvas->SetPos(canvas->SizeX - 70, 50);
+		canvas->SetPos(canvas->SizeX - 90, 60);
 
 		swprintf(buffer, 384, L"%d", Mod.DeathCount);
-		canvas->DrawTextW(FString(buffer), TRUE, 2.f, 2.f);
+		canvas->DrawTextW(FString(buffer), TRUE, 2.4f, 2.4f);
 	}
 }
 
@@ -153,7 +172,15 @@ void __fastcall MySpawnGameOverGUI(ABioSPGame* Context, void* edx, FFrame& Stack
 {
 	ProcessInternal(Context, Stack, Result);
 	Mod.RegisterDeath();
+}
 
+void __fastcall HookedActorConsoleCommand(UObject* Context, void* edx, FFrame& Stack, void* const Result)
+{
+	const auto& parms = reinterpret_cast<AActor_execConsoleCommand_Parms*>(Stack.Locals);
+	const auto& command = parms->Command.Data;
+
+	Mod.ProcessCommand(command);
+	ActorConsoleCommand(Context, Stack, Result);
 }
 
 void __fastcall HookedCallFunction(UObject* Context, void* edx, FFrame& Stack, void* Result, UFunction* Function)
@@ -175,6 +202,7 @@ void OnAttach()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 	DetourAttach(&(PVOID&)CallFunction, HookedCallFunction);
+	DetourAttach(&(PVOID&)ActorConsoleCommand, HookedActorConsoleCommand);
 	DetourTransactionCommit();
 }
 
@@ -183,6 +211,7 @@ void OnDetach()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 	DetourDetach(&(PVOID&)CallFunction, HookedCallFunction);
+	DetourDetach(&(PVOID&)ActorConsoleCommand, HookedActorConsoleCommand);
 	DetourTransactionCommit();
 
 	io::teardown_console();
