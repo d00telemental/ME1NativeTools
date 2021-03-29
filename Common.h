@@ -311,6 +311,18 @@ namespace me1asi {
 			return nullptr;
 		}
 
+		ASI_SDK_CALL UFunction* find_function(char* full_name)
+		{
+			for (const auto& func : sdk::find_objects<UFunction>())
+			{
+				if (string::equals(func->GetFullName(), full_name))
+				{
+					return func;
+				}
+			}
+			return nullptr;
+		}
+
 		/// <summary>
 		/// Get the "short name" of an Unreal object.
 		/// </summary>
@@ -349,6 +361,13 @@ namespace me1asi {
 
 			return vec;
 		}
+
+		template<typename T>
+		ASI_SDK_CALL std::vector<T> into_vector(TArray<T> arr)
+		{
+			return std::vector<T>(arr.Data, arr.Data + arr.Count);
+		}
+
 	}
 #pragma endregion
 }
