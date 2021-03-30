@@ -11,7 +11,7 @@ using namespace me1asi;
 // Utility macros and definitions.
 // ================================================================================
 
-//#define ASI_OPEN_CONSOLE
+#define ASI_OPEN_CONSOLE
 
 #define FIND_FUNCTION(field, name, impl)  do {                  \
 		    this->field = sdk::find_function("Function " name); \
@@ -147,32 +147,39 @@ public:
 
 void __fastcall MyPostRender(ABioHUD* Context, void* edx, FFrame& Stack, void* Result)
 {
-	ProcessInternal(Context, Stack, Result);
-
-	wchar_t buffer[384];
+	ProcessInternal(Context, Stack, Result);	
 	const auto& canvas = Context->Canvas;
-	canvas->SetDrawColor(255, 0, 0, 255);
-	canvas->SetPos(100.f, 100.f);
 
-	for (const auto& error : Mod.Errors)
+	if (canvas == nullptr)
 	{
-		swprintf(buffer, 384, L"%S", error.c_str());
-		canvas->DrawTextW(FString(buffer), TRUE, 1.2f, 1.2f);
+		io::logger.write_format_line(io::LM_File | io::LM_Console, "MyPostRender: canvas is NULL.");
+		return;
+	}
+
+	if (!Mod.Errors.empty())
+	{
+		canvas->SetDrawColor(255, 0, 0, 255);
+		canvas->SetPos(100.f, 100.f);
+
+		wchar_t buffer[384];
+		for (const auto& error : Mod.Errors)
+		{
+			swprintf(buffer, 384, L"%S", error.c_str());
+			canvas->DrawTextW(FString(buffer), TRUE, 1.2f, 1.2f);
+		}
 	}
 
 	if (Mod.ShowInGUI)
 	{
 		canvas->SetDrawColor(250, 25, 25, 255);
 		canvas->SetPos(canvas->SizeX - 90, 60);
-
-		swprintf(buffer, 384, L"%d", Mod.DeathCount);
-		canvas->DrawTextW(FString(buffer), TRUE, 2.4f, 2.4f);
+		canvas->DrawTextW(FString(const_cast<wchar_t*>(std::to_wstring(Mod.DeathCount).c_str())), TRUE, 2.4f, 2.4f);
 	}
 }
 
 void __fastcall MyBioVINCE_MapName_PlayerDeath(ABioWorldInfo* Context, void* edx, FFrame& Stack, void* Result)
 {
-	Stack.Code++;
+	P_FINISH;
 	Mod.RegisterDeath();
 }
 

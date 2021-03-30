@@ -26,6 +26,39 @@
 
 #pragma endregion
 
+
+// SDK extensions.
+// ============================================================
+
+typedef void(__thiscall* tNative)(UObject*, FFrame&, void*);
+tNative* GNatives = (tNative*)0x11B6B2E8;
+
+void FFrame_Step(FFrame& Stack, UObject* Context, void* const Result)
+{
+	INT B = *Stack.Code++;
+	(*GNatives[B])(Context, Stack, Result);
+}
+
+std::vector<FFrame*> StackTrace(FFrame& Stack)
+{
+	std::vector<FFrame*> vec;
+	FFrame* frame = &Stack;
+	while (frame != NULL)
+	{
+		vec.push_back(frame);
+		frame = frame->PreviousFrame;
+	}
+	return vec;
+}
+
+#define EX_DebugInfo 0x41
+
+#define P_FINISH Stack.Code++; if (*Stack.Code == EX_DebugInfo) { FFrame_Step(Stack, Stack.Object, NULL); }
+
+
+// Higher-level utilities.
+// ============================================================
+
 namespace me1asi {
 
 	// Common I/O and logging routines.
