@@ -35,7 +35,7 @@ using namespace me1asi;
 // ================================================================================
 
 void __fastcall MyPostRender(ABioHUD* Context, void* edx, FFrame& Stack, void* Result);
-void __fastcall MySpawnGameOverGUI(ABioSPGame* Context, void* edx, FFrame& Stack, void* Result);
+void __fastcall MyBioVINCE_MapName_PlayerDeath(ABioWorldInfo* Context, void* edx, FFrame& Stack, void* Result);
 
 typedef void(__thiscall* tActorConsoleCommand)(UObject*, FFrame&, void* const);
 tActorConsoleCommand ActorConsoleCommand = (tActorConsoleCommand)0x10AAB1A0;
@@ -58,7 +58,7 @@ public:
 private:
 	bool Initialized = false;
 	UFunction* PostRender = nullptr;
-	UFunction* SpawnGameOverGUI = nullptr;
+	UFunction* BioVINCE_MapName_PlayerDeath = nullptr;
 	std::string FileName;
 	std::fstream File;
 
@@ -111,7 +111,7 @@ public:
 		}
 
 		FIND_FUNCTION(PostRender, "BIOC_Base.BioHUD.PostRender", MyPostRender);
-		FIND_FUNCTION(SpawnGameOverGUI, "BIOC_Base.BioSPGame.SpawnGameOverGUI", MySpawnGameOverGUI);
+		FIND_FUNCTION(BioVINCE_MapName_PlayerDeath, "BIOC_Base.BioWorldInfo.BioVINCE_MapName_PlayerDeath", MyBioVINCE_MapName_PlayerDeath);
 
 		Initialized = true;
 		ReadFromFile();
@@ -122,7 +122,7 @@ public:
 	{
 		DeathCount++;
 		WriteToFile();
-		io::logger.write_format_line(io::LM_File | io::LM_Console, "MySpawnGameOverGUI: death registered.");
+		io::logger.write_format_line(io::LM_File | io::LM_Console, "RegisterDeath: death registered.");
 	}
 
 	void ProcessCommand(wchar_t* cmd)
@@ -170,9 +170,9 @@ void __fastcall MyPostRender(ABioHUD* Context, void* edx, FFrame& Stack, void* R
 	}
 }
 
-void __fastcall MySpawnGameOverGUI(ABioSPGame* Context, void* edx, FFrame& Stack, void* Result)
+void __fastcall MyBioVINCE_MapName_PlayerDeath(ABioWorldInfo* Context, void* edx, FFrame& Stack, void* Result)
 {
-	ProcessInternal(Context, Stack, Result);
+	Stack.Code++;
 	Mod.RegisterDeath();
 }
 
