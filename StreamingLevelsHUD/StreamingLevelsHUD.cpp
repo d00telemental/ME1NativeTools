@@ -7,9 +7,25 @@
 #include <ostream>
 #include <streambuf>
 #include <sstream>
+#include <unordered_set>
 #include <vector>
 
 using namespace me1asi;
+
+namespace real
+{
+	template<typename T>
+	struct TTransArray : public TArray<T>
+	{
+		UObject* Owner;
+	};
+
+	struct ULevelBase : public UObject
+	{
+		TTransArray<AActor*>	Actors;
+		FURL					URL;
+	};
+}
 
 
 size_t MaxMemoryHit = 0;
@@ -98,6 +114,15 @@ void RenderHook(UObject* pObject, UFunction* pFunction, void* pParms, void* pRes
 			{
 				if (hud->WorldInfo->StreamingLevels.Count > 0) {
 					int yIndex = 3; //Start at line 3 (starting at 0)
+
+					// d00t - additional diagnostics
+					// ----------------------------------------
+
+					std::vector<AActor*> actors{};
+
+					// ----------------------------------------
+					// end of additional diagnostics - d00t
+
 					for (int i = 0; i < hud->WorldInfo->StreamingLevels.Count; i++) {
 						std::wstringstream ss;
 						ULevelStreaming* sl = hud->WorldInfo->StreamingLevels.Data[i];
@@ -146,6 +171,51 @@ void RenderHook(UObject* pObject, UFunction* pFunction, void* pParms, void* pRes
 								g = 175;
 								b = 0;
 							}
+
+
+							// d00t - additional diagnostics
+							// ----------------------------------------
+
+							ss << "            0x" << std::hex << (unsigned long)(void*)sl << std::dec;
+
+							auto loadedLevel = reinterpret_cast<real::ULevelBase*>(sl->LoadedLevel);
+							if (loadedLevel)
+							{
+								ss << "  actor count: " << loadedLevel->Actors.Count
+									//<< " (owned by " << sdk::fullname_of(loadedLevel->Actors.Owner) << ")";
+									;
+
+								/** Figure out if any of the LoadedLevel->Actors arrays intersect. **/
+
+								int actorsPrevRefd = 0;
+
+								for (const auto& actor : sdk::into_vector(loadedLevel->Actors))
+								{
+									if (actor == nullptr)
+									{
+										continue;
+									}
+
+									if (std::find(actors.begin(), actors.end(), actor) == actors.end())
+									{
+										actors.push_back(actor);
+									}
+									else
+									{
+										actorsPrevRefd++;
+									}
+								}
+
+								if (actorsPrevRefd > 0)
+								{
+									ss << "  HAS ACTORS REFERENCED BY PREVIOUS STREAMINGLEVELS ( " << actorsPrevRefd << " )";
+								}
+							}
+
+							// ----------------------------------------
+							// end of additional diagnostics - d00t
+
+
 							const std::wstring msg = ss.str();
 							RenderTextSLH(msg, 5, yIndex * 12.0f, r, g, b, 1.0f, hud->Canvas);
 							yIndex++;
