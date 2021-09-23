@@ -23,3 +23,7 @@ Utilizes the ol' reliable ProcessEvent hook to find all UFunction instances in r
 ### LoggerProcessInternal
 
 Hooks UObject::CallFunction, UObject::ProcessEvent and UObject::ProcessInternal, respectively, and logs all calls to its target function. If you need to find or detour something, chances are you will find it in one of these plugins' logs: `log_callfunction.txt`, `log_processevent.txt`, `log_processinternal.txt`.
+
+### StreamingLevelsHUD
+
+Cannibalized version of [StreamingLevelsHUD for LE1](https://github.com/ME3Tweaks/LE1-ASI-Plugins/tree/main/LE1StreamingLevelsHUD) by ME3Tweaks.
